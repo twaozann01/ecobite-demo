@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft, Banknote, Bell, Bike, CircleCheck, Clock, CookingPot, Croissant, CupSoda, Carrot, Flag, Gift, Heart, Landmark, LayoutGrid, Leaf,
   CreditCard, MapPin, MessageCircle, Navigation, Package, Phone, RefreshCcw, RotateCcw, Search, ShoppingBag, SlidersHorizontal, Soup, Star,
-  Store, User, Zap, type LucideIcon,
+  Store, User, Zap, Map as MapIcon, type LucideIcon,
 } from 'lucide-react';
 import type { Nav } from './App';
-import { MY_SHOP_ID, OFFERS, fmt, hiddenReason, hm, left, type Category, type Item } from './data';
+import { MY_SHOP_ID, OFFERS, SAMPLE_REVIEWS, fmt, hiddenReason, hm, left, type Category, type Item } from './data';
 import { FULFIL, shopOf, useNow, useStore, type Fulfil, type Order } from './store';
 import { ChatBox, Countdown, DealCard, FavButton, FulfilLabel, ItemRow } from './shared';
 import {
@@ -56,15 +56,20 @@ export function Home({ nav }: { nav: Nav }) {
             <div className="loc">
               <span className="muted small">Món dư gần</span>
               <b>
-                <MapPin size={16} /> Quận 1, TP.HCM
+                <MapPin size={16} /> Chùa Láng, Đống Đa, Hà Nội
               </b>
             </div>
+            <div className="row" style={{ gap: 4 }}>
+            <IconButton onClick={() => nav.open({ name: 'map' })} aria-label="Bản đồ">
+              <MapIcon size={22} />
+            </IconButton>
             <IconButton onClick={() => nav.open({ name: 'notifs' })} aria-label="Thông báo">
               <span className="ico">
                 <Bell size={22} />
                 {unread > 0 && <i className="dot">{unread}</i>}
               </span>
             </IconButton>
+            </div>
           </div>
           <div className="search">
             <Search size={18} />
@@ -227,7 +232,10 @@ export function Detail({ id, nav }: { id: string; nav: Nav }) {
   const shop = shopOf(s, item.shopId);
   const hidden = hiddenReason(item, now);
   const reported = s.reports.find((r) => r.itemId === item.id);
-  const reviews = s.orders.filter((o) => o.itemId === item.id && o.stars);
+  const reviews = [
+    ...s.orders.filter((o) => o.itemId === item.id && o.stars).map((o) => ({ id: o.id, name: s.profile.name, stars: o.stars ?? 5, text: o.review || 'Món ngon, người bán thân thiện.' })),
+    ...(SAMPLE_REVIEWS[item.shopId] ?? []).map((r, i) => ({ id: 'r' + i, ...r })),
+  ];
   const seller = s.role === 'seller';
   const end = Math.min(item.expiresAt, item.pickupTo);
 
@@ -297,10 +305,10 @@ export function Detail({ id, nav }: { id: string; nav: Nav }) {
               {reviews.map((o) => (
                 <Card key={o.id}>
                   <div className="row between">
-                    <b>{s.profile.name}</b>
-                    <Stars value={o.stars ?? 5} />
+                    <b>{o.name}</b>
+                    <Stars value={o.stars} />
                   </div>
-                  <Muted>{o.review || 'Món ngon, người bán thân thiện.'}</Muted>
+                  <Muted>{o.text}</Muted>
                 </Card>
               ))}
             </Stack>

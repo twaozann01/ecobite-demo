@@ -6,6 +6,7 @@ import {
 import type { Nav } from './App';
 import { CATEGORIES, MY_SHOP_ID, PRESET_PHOTOS, atToday, fmt, hiddenReason, hm, left, photo, readPhoto, type Category, type Shop } from './data';
 import { ResetSheet } from './buyer';
+import { StatsTeaser } from './extra';
 import { ChatBox, FulfilLabel } from './shared';
 import { FULFIL, shopOf, useNow, useStore } from './store';
 import {
@@ -45,6 +46,7 @@ export function Listings({ nav }: { nav: Nav }) {
           <Button size="lg" block icon={<Plus size={20} />} onClick={() => nav.open({ name: 'post' })}>
             Đăng món mới
           </Button>
+          <StatsTeaser nav={nav} />
           <div>
             <Segmented options={SEGS} value={seg} onChange={setSeg} />
           </div>

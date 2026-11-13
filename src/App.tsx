@@ -5,6 +5,7 @@ import { BuyerAccount, ChatView, Detail, Home, Orders, Pay, ProfileEdit, ShopPag
 import { Listings, PostWizard, SellerChat, SellerOrders, SellerShop, ShopEdit } from './seller';
 import { Inbox, Notifs, RoleSelect } from './shared';
 import { Toast } from './ui';
+import { MapView, SellerStats } from './extra';
 
 export type Tab = 'home' | 'orders' | 'inbox' | 'account' | 'listings' | 'sorders' | 'shopTab';
 export type View =
@@ -16,7 +17,9 @@ export type View =
   | { name: 'notifs' }
   | { name: 'profile' }
   | { name: 'shopEdit' }
-  | { name: 'post' };
+  | { name: 'post' }
+  | { name: 'map' }
+  | { name: 'stats' };
 
 export interface Nav {
   open: (v: View) => void;
@@ -106,6 +109,10 @@ export function App() {
           return <ShopEdit nav={nav} />;
         case 'post':
           return <PostWizard nav={nav} />;
+        case 'map':
+          return <MapView nav={nav} />;
+        case 'stats':
+          return <SellerStats nav={nav} />;
       }
     }
     switch (tab) {

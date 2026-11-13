@@ -50,17 +50,51 @@ const M = 60_000;
 export const MY_SHOP_ID = 'me';
 
 export const SEED_SHOPS: Shop[] = [
-  { id: 's1', name: 'Cơm Tấm Bà Năm', emoji: '🍚', address: '12 Lê Thánh Tôn, Bến Nghé, Q.1', hours: '06:00 – 21:30', phone: '0901 111 222', dist: 0.4, rating: 4.8, intro: 'Cơm tấm gia truyền 20 năm, cuối ngày bán lại phần dư giá tốt.', deliveryFee: 10000 },
-  { id: 's2', name: 'Lò Bánh Sáng', emoji: '🥖', address: '45 Nguyễn Huệ, Bến Nghé, Q.1', hours: '05:30 – 21:00', phone: '0902 333 444', dist: 0.9, rating: 4.6, intro: 'Bánh mì nướng củi mỗi ngày.', deliveryFee: 0 },
-  { id: 's3', name: 'Phở Thìn 13', emoji: '🍜', address: '13 Pasteur, Bến Nghé, Q.1', hours: '06:00 – 22:00', phone: '0903 555 666', dist: 1.2, rating: 4.9, intro: 'Phở bò Hà Nội nước dùng ninh 12 tiếng.', deliveryFee: 15000 },
-  { id: 's4', name: 'Tiệm Bánh Lúa Mạch', emoji: '🥐', address: '88 Hai Bà Trưng, Đa Kao, Q.1', hours: '07:00 – 21:00', phone: '0904 777 888', dist: 1.5, rating: 4.7, intro: 'Bánh ngọt Pháp, nướng trong ngày.', deliveryFee: 12000 },
-  { id: 's5', name: 'TeaHouse', emoji: '🧋', address: '21 Lý Tự Trọng, Bến Nghé, Q.1', hours: '08:00 – 22:30', phone: '0905 121 212', dist: 0.7, rating: 4.5, intro: 'Trà sữa nấu từ lá trà tươi.', deliveryFee: 0 },
-  { id: 's6', name: 'Siêu Thị Mini Green', emoji: '🥬', address: '5 Tôn Đức Thắng, Bến Nghé, Q.1', hours: '07:00 – 22:00', phone: '0906 343 434', dist: 2.1, rating: 4.8, intro: 'Rau củ hữu cơ từ Đà Lạt.', deliveryFee: 15000 },
-  { id: 's7', name: 'Bún Chả Phố Cổ', emoji: '🍲', address: '102 Calmette, Nguyễn Thái Bình, Q.1', hours: '10:00 – 22:00', phone: '0907 565 656', dist: 1.8, rating: 4.6, intro: 'Bún chả than hoa chuẩn vị Hà Nội.', deliveryFee: 0 },
-  { id: MY_SHOP_ID, name: 'Bếp Nhà An', emoji: '🏠', address: '27 Nguyễn Thị Minh Khai, Q.1', hours: '16:00 – 21:00', phone: '0901 234 567', dist: 0.2, rating: 5, intro: 'Cơm nhà nấu, dư bao nhiêu bán bấy nhiêu.', deliveryFee: 8000, mine: true },
+  { id: 's1', name: 'Cơm Tấm Bà Năm', emoji: '🍚', address: '215 Chùa Láng, Láng Thượng, Đống Đa, Hà Nội', hours: '06:00 – 21:30', phone: '0901 111 222', dist: 0.4, rating: 4.8, intro: 'Cơm tấm gia truyền 20 năm, cuối ngày bán lại phần dư giá tốt.', deliveryFee: 10000 },
+  { id: 's2', name: 'Lò Bánh Sáng', emoji: '🥖', address: '1150 Đường Láng, Láng Thượng, Đống Đa, Hà Nội', hours: '05:30 – 21:00', phone: '0902 333 444', dist: 0.9, rating: 4.6, intro: 'Bánh mì nướng củi mỗi ngày.', deliveryFee: 0 },
+  { id: 's3', name: 'Phở Thìn 13', emoji: '🍜', address: '86 Nguyễn Chí Thanh, Láng Thượng, Đống Đa, Hà Nội', hours: '06:00 – 22:00', phone: '0903 555 666', dist: 1.2, rating: 4.9, intro: 'Phở bò Hà Nội nước dùng ninh 12 tiếng.', deliveryFee: 15000 },
+  { id: 's4', name: 'Tiệm Bánh Lúa Mạch', emoji: '🥐', address: '54 Huỳnh Thúc Kháng, Láng Hạ, Đống Đa, Hà Nội', hours: '07:00 – 21:00', phone: '0904 777 888', dist: 1.5, rating: 4.7, intro: 'Bánh ngọt Pháp, nướng trong ngày.', deliveryFee: 12000 },
+  { id: 's5', name: 'TeaHouse', emoji: '🧋', address: '35 Pháo Đài Láng, Láng Thượng, Đống Đa, Hà Nội', hours: '08:00 – 22:30', phone: '0905 121 212', dist: 0.7, rating: 4.5, intro: 'Trà sữa nấu từ lá trà tươi.', deliveryFee: 0 },
+  { id: 's6', name: 'Siêu Thị Mini Green', emoji: '🥬', address: '18 Nguyễn Khang, Yên Hòa, Cầu Giấy, Hà Nội', hours: '07:00 – 22:00', phone: '0906 343 434', dist: 2.1, rating: 4.8, intro: 'Rau củ hữu cơ từ Đà Lạt.', deliveryFee: 15000 },
+  { id: 's7', name: 'Bún Chả Phố Cổ', emoji: '🍲', address: '72 Láng Hạ, Thành Công, Ba Đình, Hà Nội', hours: '10:00 – 22:00', phone: '0907 565 656', dist: 1.8, rating: 4.6, intro: 'Bún chả than hoa chuẩn vị Hà Nội.', deliveryFee: 0 },
+  { id: MY_SHOP_ID, name: 'Bếp Nhà An', emoji: '🏠', address: '199 Chùa Láng, Láng Thượng, Đống Đa, Hà Nội', hours: '16:00 – 21:00', phone: '0901 234 567', dist: 0.2, rating: 5, intro: 'Cơm nhà nấu, dư bao nhiêu bán bấy nhiêu.', deliveryFee: 8000, mine: true },
 ];
 
-type SeedRow = [id: string, name: string, emoji: string, bg: string, shopId: string, cat: Category, price: number, orig: number, qty: number, cooked: string, hoursLeft: number, flash?: boolean];
+/** Vị trí người mua (cạnh Chùa Láng) và các cửa hàng, dùng cho bản đồ. */
+export const ME_POS: [number, number] = [21.0229, 105.8042];
+export const SHOP_POS: Record<string, [number, number]> = {
+  me: [21.0236, 105.8033],
+  s1: [21.0224, 105.8026],
+  s2: [21.0262, 105.8008],
+  s3: [21.0216, 105.8106],
+  s4: [21.0184, 105.8112],
+  s5: [21.0191, 105.8041],
+  s6: [21.0271, 105.7968],
+  s7: [21.0168, 105.8152],
+};
+
+/** Đánh giá mẫu của người mua khác, hiện ở trang chi tiết món theo cửa hàng. */
+export const SAMPLE_REVIEWS: Record<string, { name: string; stars: number; text: string }[]> = {
+  s1: [
+    { name: 'Hải Yến', stars: 5, text: 'Cơm còn ấm, phần nhiều, cô chủ dễ thương.' },
+    { name: 'Đức Minh', stars: 4, text: 'Giá rẻ bất ngờ, đến đúng giờ là có ngay.' },
+  ],
+  s2: [{ name: 'Ngọc Lan', stars: 5, text: 'Bánh mì vẫn giòn dù cuối ngày.' }],
+  s3: [
+    { name: 'Tuấn Anh', stars: 5, text: 'Nước dùng đậm, đáng tiền.' },
+    { name: 'Phương Thảo', stars: 5, text: 'Shop đóng gói cẩn thận, tách nước riêng.' },
+  ],
+  s4: [{ name: 'Mai Chi', stars: 4, text: 'Croissant hơi mềm nhưng bơ thơm, giá quá hời.' }],
+  s5: [{ name: 'Khánh Linh', stars: 4, text: 'Trà ngon, trân châu hơi cứng chút.' }],
+  s6: [{ name: 'Bích Ngọc', stars: 5, text: 'Rau tươi, combo đủ nấu 2 bữa.' }],
+  s7: [{ name: 'Văn Hùng', stars: 5, text: 'Chả nướng thơm, nước chấm chuẩn vị.' }],
+  me: [
+    { name: 'Minh Anh', stars: 5, text: 'Cơm nhà nấu ngon như mẹ làm!' },
+    { name: 'Hoàng Long', stars: 5, text: 'Chị chủ nhiệt tình, hẹn giờ rất đúng.' },
+  ],
+};
+
+type SeedRow =[id: string, name: string, emoji: string, bg: string, shopId: string, cat: Category, price: number, orig: number, qty: number, cooked: string, hoursLeft: number, flash?: boolean];
 
 const ROWS: SeedRow[] = [
   ['i1', 'Cơm gà xối mỡ', '🍗', '#fde68a', 's1', 'Cơm', 25000, 50000, 6, '10:30', 2, true],
@@ -71,12 +105,15 @@ const ROWS: SeedRow[] = [
   ['i6', 'Combo rau củ hữu cơ', '🥬', '#bbf7d0', 's6', 'Rau củ', 22000, 55000, 5, '08:00', 6],
   ['i7', 'Sườn nướng mật ong', '🍖', '#fed7aa', 's1', 'Cơm', 28000, 55000, 3, '10:30', 2.5],
   ['i8', 'Bún chả Hà Nội', '🍲', '#fecaca', 's7', 'Món nước', 32000, 60000, 7, '11:00', 3],
+  ['i9', 'Cơm chiên dương châu', '🍚', '#fde68a', MY_SHOP_ID, 'Cơm', 20000, 40000, 4, '16:30', 3, true],
+  ['i10', 'Bánh bao nhân thịt (3 cái)', '🥟', '#fed7aa', MY_SHOP_ID, 'Bánh', 15000, 30000, 6, '15:00', 4],
+  ['i11', 'Bánh bông lan trứng muối', '🍰', '#fde68a', MY_SHOP_ID, 'Bánh', 25000, 50000, 0, '08:00', 5],
 ];
 
 /** Ảnh món thật (Unsplash) trong public/food. Thiếu ảnh thì Thumb tự lùi về hình minh họa. */
 export const photo = (key: string) => `./food/${key}.jpg`;
 const SEED_PHOTO: Record<string, string> = {
-  i1: 'com-ga', i2: 'banh-mi', i3: 'pho-bo', i4: 'croissant', i5: 'tra-sua', i6: 'rau-cu', i7: 'com-suon', i8: 'bun-cha',
+  i1: 'com-ga', i2: 'banh-mi', i3: 'pho-bo', i4: 'croissant', i5: 'tra-sua', i6: 'rau-cu', i7: 'com-suon', i8: 'bun-cha', i9: 'com-chien', i10: 'banh-bao', i11: 'banh-ngot',
 };
 
 /** Ảnh có sẵn để người bán chọn nhanh khi đăng món (ngoài chụp/chọn ảnh từ máy). */

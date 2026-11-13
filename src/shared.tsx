@@ -123,7 +123,7 @@ export function ChatBox({
   };
   return (
     <>
-      <TopBar title={<WithIcon icon={avatar}>{title}</WithIcon>} sub={sub} onBack={nav.back} />
+      <TopBar lead={avatar} title={title} sub={sub} onBack={nav.back} />
       <div className="scroll chat">
         {msgs.length === 0 && <Empty icon={<MessageCircle size={30} />}>Hẹn giờ và địa điểm nhận món ngay tại đây.</Empty>}
         {msgs.map((m, i) => (

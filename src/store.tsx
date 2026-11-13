@@ -78,26 +78,110 @@ export interface State {
   kg: number;
   nearbySent: boolean;
   savedAt: number;
+  /** id món người bán đã xóa, để không bổ sung lại món mẫu đó */
+  removed?: string[];
 }
+
+const M = 60_000;
+const H = 60 * M;
 
 function fresh(now = Date.now()): State {
   return {
     role: null,
     items: seedItems(now),
     shops: SEED_SHOPS,
-    orders: [],
+    orders: [
+      {
+        id: 'o1', code: 'EB4821', itemId: 'i1', qty: 2, total: 50000, fee: 0, fulfil: 'pickup', method: 'Chuyển khoản MB', status: 'paid', holdMins: 30, createdAt: now - 8 * M,
+        msgs: [
+          { from: 'seller', text: 'Chào bạn, Cơm Tấm Bà Năm đã nhận đơn 2 phần Cơm gà xối mỡ. Mã nhận món: EB4821.', at: now - 8 * M },
+          { from: 'buyer', text: 'Dạ shop ơi, khoảng 15 phút nữa em qua lấy nhé!', at: now - 6 * M },
+          { from: 'seller', text: 'Ok em, cô để sẵn ở quầy, tới đọc mã là lấy được luôn nha.', at: now - 5 * M },
+          { from: 'buyer', text: 'Cho em xin thêm ít nước mắm được không ạ?', at: now - 4 * M },
+          { from: 'seller', text: 'Được chứ, cô bỏ thêm cho 2 túi nhé 😊', at: now - 3 * M },
+        ],
+      },
+      {
+        id: 'o2', code: 'EB3307', itemId: 'i8', qty: 1, total: 32000, fee: 0, fulfil: 'self', method: 'Tiền mặt', status: 'paid', holdMins: 45, createdAt: now - 25 * M,
+        msgs: [
+          { from: 'seller', text: 'Bún Chả Phố Cổ đã nhận đơn. Người lấy hộ chỉ cần đọc mã EB3307 nhé.', at: now - 25 * M },
+          { from: 'buyer', text: 'Em nhờ bạn tên Hùng qua lấy giúp ạ, áo xanh.', at: now - 22 * M },
+          { from: 'seller', text: 'Dạ ok, shop sẽ đưa đúng người có mã.', at: now - 21 * M },
+        ],
+      },
+      {
+        id: 'o3', code: 'EB2190', itemId: 'i4', qty: 3, total: 54000, fee: 12000, fulfil: 'shop', method: 'Thẻ ngân hàng', status: 'received', holdMins: 30, createdAt: now - 26 * H,
+        msgs: [
+          { from: 'seller', text: 'Tiệm Bánh Lúa Mạch sẽ tự giao tới 199 Chùa Láng nhé!', at: now - 26 * H },
+          { from: 'buyer', text: 'Shop giao trước 7h tối giúp em nha.', at: now - 26 * H + 2 * M },
+          { from: 'seller', text: 'Shop đang tới, 5 phút nữa nha bạn.', at: now - 25 * H },
+          { from: 'buyer', text: 'Em nhận được rồi, bánh còn giòn lắm, cảm ơn shop!', at: now - 25 * H + 10 * M },
+        ],
+        address: '199 Chùa Láng, Láng Thượng, Đống Đa, Hà Nội',
+      },
+      {
+        id: 'o4', code: 'EB1055', itemId: 'i3', qty: 1, total: 30000, fee: 0, fulfil: 'pickup', method: 'Chuyển khoản MB', status: 'reviewed', holdMins: 30, createdAt: now - 50 * H,
+        stars: 5, review: 'Phở còn nóng, nước dùng ngon, giá quá hời!',
+        msgs: [
+          { from: 'seller', text: 'Phở Thìn 13 đã nhận đơn, mã EB1055.', at: now - 50 * H },
+          { from: 'buyer', text: 'Shop cho em xin thêm hành nhé.', at: now - 50 * H + 3 * M },
+          { from: 'seller', text: 'Có ngay em ơi!', at: now - 50 * H + 4 * M },
+        ],
+      },
+      {
+        id: 'o5', code: 'EB0932', itemId: 'i5', qty: 2, total: 40000, fee: 0, fulfil: 'pickup', method: 'Tiền mặt', status: 'cancelled', holdMins: 15, createdAt: now - 74 * H,
+        msgs: [
+          { from: 'buyer', text: 'Shop ơi em kẹt việc không qua kịp, em hủy nhé.', at: now - 74 * H + 5 * M },
+          { from: 'seller', text: 'Không sao bạn, hẹn lần sau nha!', at: now - 74 * H + 6 * M },
+        ],
+      },
+    ],
     sellerOrders: [
-      { id: 's1', buyer: 'Minh Anh', itemName: 'Cơm chiên dương châu', qty: 2, fulfil: 'pickup', done: false, msgs: [{ from: 'buyer', text: 'Chào chị, 20:15 em qua lấy được không ạ?', at: now - 600_000 }] },
-      { id: 's2', buyer: 'Quốc Bảo', itemName: 'Canh chua cá lóc', qty: 1, fulfil: 'shop', done: false, msgs: [] },
+      {
+        id: 's1', buyer: 'Minh Anh', itemName: 'Cơm chiên dương châu', qty: 2, fulfil: 'pickup', done: false,
+        msgs: [
+          { from: 'buyer', text: 'Chào chị, 20:15 em qua lấy được không ạ?', at: now - 10 * M },
+          { from: 'seller', text: 'Được em nhé, chị để sẵn 2 hộp.', at: now - 9 * M },
+          { from: 'buyer', text: 'Dạ em cảm ơn chị!', at: now - 8 * M },
+        ],
+      },
+      {
+        id: 's2', buyer: 'Quốc Bảo', itemName: 'Canh chua cá lóc', qty: 1, fulfil: 'shop', done: false,
+        msgs: [
+          { from: 'buyer', text: 'Chị giao tới ngõ 46 Láng Thượng giúp em với ạ.', at: now - 20 * M },
+          { from: 'seller', text: 'Ok em, khoảng 19h chị mang qua nhé.', at: now - 18 * M },
+        ],
+      },
+      {
+        id: 's3', buyer: 'Thu Trang', itemName: 'Thịt kho trứng', qty: 3, fulfil: 'self', done: false,
+        msgs: [
+          { from: 'buyer', text: 'Em nhờ chồng qua lấy hộ, mã là gì chị nhỉ?', at: now - 35 * M },
+          { from: 'seller', text: 'Mã EB7712 nha em, anh tới đọc mã là chị đưa.', at: now - 33 * M },
+        ],
+      },
+      {
+        id: 's4', buyer: 'Hoàng Long', itemName: 'Cơm chiên dương châu', qty: 1, fulfil: 'pickup', done: true,
+        msgs: [
+          { from: 'buyer', text: 'Em lấy rồi nha chị, ngon lắm!', at: now - 22 * H },
+          { from: 'seller', text: 'Cảm ơn em, mai ghé tiếp nhé 💚', at: now - 22 * H + M },
+        ],
+      },
+      {
+        id: 's5', buyer: 'Lan Phương', itemName: 'Canh chua cá lóc', qty: 2, fulfil: 'shop', done: true,
+        msgs: [{ from: 'seller', text: 'Chị giao tới rồi nhé em.', at: now - 46 * H }],
+      },
     ],
     favorites: ['i4'],
     notifs: [
       { id: 'n1', icon: '⚡', text: 'Flash sale 50%: Phở bò tái nạm chỉ còn 30.000đ!', read: false, itemId: 'i3' },
       { id: 'n2', icon: '📍', text: 'Tiệm Bánh Lúa Mạch vừa đăng món mới gần bạn (1,5 km).', read: false, itemId: 'i4' },
+      { id: 'n4', icon: '💬', text: 'Cơm Tấm Bà Năm: “Được chứ, cô bỏ thêm cho 2 túi nhé 😊”', read: false },
+      { id: 'n5', icon: '🧺', text: 'Đơn Bún chả Hà Nội đang được giữ. Mã nhận món: EB3307', read: true },
+      { id: 'n6', icon: '⭐', text: 'Cảm ơn bạn đã đánh giá Phở Thìn 13. +10 EcoPoint', read: true },
       { id: 'n3', icon: '🌱', text: 'Bạn sắp đạt huy hiệu Green Consumer cấp 2!', read: true },
     ],
     reports: [],
-    profile: { name: 'Nguyễn An', phone: '0901 234 567', address: '27 Nguyễn Thị Minh Khai, Q.1' },
+    profile: { name: 'Nguyễn An', phone: '0901 234 567', address: '199 Chùa Láng, Láng Thượng, Đống Đa, Hà Nội' },
     push: true,
     points: 120,
     kg: 3.4,
@@ -138,7 +222,7 @@ function reducer(s: State, a: Action): State {
       return { ...s, items: [a.item, ...s.items], notifs: [n, ...s.notifs], nearbySent: s.nearbySent || !!a.nearby };
     }
     case 'removeItem':
-      return { ...s, items: s.items.filter((i) => i.id !== a.id) };
+      return { ...s, items: s.items.filter((i) => i.id !== a.id), removed: [...(s.removed ?? []), a.id] };
     case 'restock':
       return { ...s, items: s.items.map((i) => (i.id === a.id ? { ...i, qty: i.qty + 5 } : i)) };
     case 'order': {
@@ -203,7 +287,7 @@ function reducer(s: State, a: Action): State {
   }
 }
 
-const KEY = 'ecobite-demo-v3';
+const KEY = 'ecobite-demo-v4';
 
 /** Đọc dữ liệu đã lưu trên máy. Không bao giờ xóa dữ liệu người dùng; chỉ làm mới giờ của món MẪU đã quá hạn
  *  (để mở lại hôm sau vẫn có món để demo). Món người dùng đăng giữ nguyên, quá hạn thì tự ẩn. */
@@ -220,6 +304,9 @@ function load(): State {
         if (now >= i.pickupTo) return { ...seed, qty: i.qty > 0 ? i.qty : seed.qty };
         return i.photo ? i : { ...i, photo: seed.photo };
       });
+      // món mẫu thêm ở bản sau: bổ sung vào máy đã có dữ liệu cũ
+      const have = new Set(st.items.map((i) => i.id));
+      st.items.push(...[...seeds.values()].filter((i) => !have.has(i.id) && !(st.removed ?? []).includes(i.id)));
       return { ...st, role: st.role ?? null };
     }
   } catch {

@@ -96,7 +96,7 @@ export function Footer({ children }: { children: ReactNode }) {
 }
 
 /* ── thanh trên (nền sáng) ── */
-export function TopBar({ title, sub, onBack, right }: { title: ReactNode; sub?: ReactNode; onBack?: () => void; right?: ReactNode }) {
+export function TopBar({ title, sub, onBack, right, lead }: { title: ReactNode; sub?: ReactNode; onBack?: () => void; right?: ReactNode; lead?: ReactNode }) {
   return (
     <header className="topbar">
       {onBack && (
@@ -104,6 +104,7 @@ export function TopBar({ title, sub, onBack, right }: { title: ReactNode; sub?: 
           <ArrowLeft size={22} />
         </IconButton>
       )}
+      {lead}
       <div className="topbar-title">
         <h1>{title}</h1>
         {sub && <span>{sub}</span>}

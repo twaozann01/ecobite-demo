@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   ArrowLeft, Banknote, Bell, Bike, CircleCheck, Clock, CookingPot, Croissant, CupSoda, Carrot, Flag, Gift, Heart, Landmark, LayoutGrid, Leaf,
   CreditCard, MapPin, MessageCircle, Navigation, Package, Phone, RefreshCcw, RotateCcw, Search, ShoppingBag, SlidersHorizontal, Soup, Star,
-  Store, User, Zap, Map as MapIcon, type LucideIcon,
+  Store, User, Zap, Map as MapIcon, LogOut, type LucideIcon,
 } from 'lucide-react';
 import type { Nav } from './App';
 import { MY_SHOP_ID, OFFERS, SAMPLE_REVIEWS, fmt, hiddenReason, hm, left, type Category, type Item } from './data';
@@ -878,10 +878,40 @@ export function BuyerAccount({ nav }: { nav: Nav }) {
           </div>
           <div className="list-group">
             <ListRow icon={<RefreshCcw size={18} />} title="Đặt lại dữ liệu demo" sub="Dữ liệu đang lưu trên máy này" onClick={() => setConfirmReset(true)} danger />
+            <LogoutRow />
           </div>
         </Stack>
       </Page>
       {confirmReset && <ResetSheet onClose={() => setConfirmReset(false)} />}
+    </>
+  );
+}
+
+export function LogoutRow() {
+  const { d, showToast } = useStore();
+  const [ask, setAsk] = useState(false);
+  return (
+    <>
+      <ListRow icon={<LogOut size={18} />} title="Đăng xuất" danger onClick={() => setAsk(true)} />
+      {ask && (
+        <Sheet title="Đăng xuất khỏi EcoBite?" onClose={() => setAsk(false)}>
+          <Muted>Đơn hàng và tin nhắn vẫn được giữ trên máy này, đăng nhập lại là thấy.</Muted>
+          <div className="row" style={{ gap: 8, marginTop: 16 }}>
+            <Button variant="ghost" grow onClick={() => setAsk(false)}>
+              Ở lại
+            </Button>
+            <Button
+              grow
+              onClick={() => {
+                d({ type: 'logout' });
+                showToast('Đã đăng xuất');
+              }}
+            >
+              Đăng xuất
+            </Button>
+          </div>
+        </Sheet>
+      )}
     </>
   );
 }

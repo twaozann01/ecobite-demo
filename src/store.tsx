@@ -80,7 +80,23 @@ export interface State {
   savedAt: number;
   /** id món người bán đã xóa, để không bổ sung lại món mẫu đó */
   removed?: string[];
+  /** đã đăng nhập (giả lập, không có máy chủ) */
+  authed?: boolean;
+  /** tài khoản đã đăng ký trên máy này */
+  accounts?: Account[];
 }
+
+export interface Account {
+  phone: string; // chỉ chữ số
+  name: string;
+  address: string;
+  role: Role;
+}
+
+export const DEMO_PHONE = '0901234567';
+export const DEMO_OTP = '123456';
+export const digits = (p: string) => p.replace(/\D/g, '');
+export const prettyPhone = (p: string) => digits(p).replace(/^(\d{4})(\d{3})(\d+)$/, '$1 $2 $3');
 
 const M = 60_000;
 const H = 60 * M;
@@ -208,7 +224,18 @@ export type Action =
   | { type: 'shop'; shop: Shop }
   | { type: 'push'; on: boolean }
   | { type: 'role'; role: Role | null }
+  | { type: 'login'; phone: string }
+  | { type: 'register'; account: Account; shop?: Pick<Shop, 'name' | 'address' | 'hours' | 'phone'> }
+  | { type: 'logout' }
   | { type: 'reset' };
+
+/** Luôn có sẵn tài khoản demo (Nguyễn An) để thuyết trình. */
+export const accountsOf = (s: State): Account[] => {
+  const list = s.accounts ?? [];
+  return list.some((x) => x.phone === DEMO_PHONE)
+    ? list
+    : [{ phone: DEMO_PHONE, name: 'Nguyễn An', address: '199 Chùa Láng, Láng Thượng, Đống Đa, Hà Nội', role: 'buyer' }, ...list];
+};
 
 const notif = (icon: string, text: string, itemId?: string): Notif => ({ id: 'n' + Date.now() + Math.random(), icon, text, read: false, itemId });
 
@@ -282,8 +309,27 @@ function reducer(s: State, a: Action): State {
       return { ...s, push: a.on };
     case 'role':
       return { ...s, role: a.role };
+    case 'login': {
+      const acc = accountsOf(s).find((x) => x.phone === digits(a.phone));
+      if (!acc) return s;
+      // tài khoản demo: để người thuyết trình tự chọn vai trò
+      return { ...s, authed: true, role: acc.phone === DEMO_PHONE ? null : acc.role, profile: { name: acc.name, phone: prettyPhone(acc.phone), address: acc.address } };
+    }
+    case 'register': {
+      const acc = a.account;
+      return {
+        ...s,
+        authed: true,
+        role: acc.role,
+        accounts: [...accountsOf(s).filter((x) => x.phone !== acc.phone), acc],
+        profile: { name: acc.name, phone: prettyPhone(acc.phone), address: acc.address },
+        shops: a.shop ? s.shops.map((x) => (x.id === MY_SHOP_ID ? { ...x, ...a.shop } : x)) : s.shops,
+      };
+    }
+    case 'logout':
+      return { ...s, authed: false, role: null };
     case 'reset':
-      return fresh();
+      return { ...fresh(), authed: s.authed, accounts: s.accounts, role: s.role };
   }
 }
 

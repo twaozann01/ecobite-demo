@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import type { Nav } from './App';
 import { CATEGORIES, MY_SHOP_ID, PRESET_PHOTOS, atToday, fmt, hiddenReason, hm, left, photo, readPhoto, type Category, type Shop } from './data';
-import { ResetSheet } from './buyer';
+import { LogoutRow, ResetSheet } from './buyer';
 import { StatsTeaser } from './extra';
 import { ChatBox, FulfilLabel } from './shared';
 import { FULFIL, shopOf, useNow, useStore } from './store';
@@ -494,6 +494,7 @@ export function SellerShop({ nav }: { nav: Nav }) {
           </div>
           <div className="list-group">
             <ListRow icon={<RefreshCcw size={18} />} title="Đặt lại dữ liệu demo" sub="Dữ liệu đang lưu trên máy này" onClick={() => setConfirmReset(true)} danger />
+            <LogoutRow />
           </div>
         </Stack>
       </Page>

@@ -6,6 +6,7 @@ import { Listings, PostWizard, SellerChat, SellerOrders, SellerShop, ShopEdit } 
 import { Inbox, Notifs, RoleSelect } from './shared';
 import { Toast } from './ui';
 import { MapView, SellerStats } from './extra';
+import { Auth } from './auth';
 
 export type Tab = 'home' | 'orders' | 'inbox' | 'account' | 'listings' | 'sorders' | 'shopTab';
 export type View =
@@ -56,6 +57,15 @@ export function App() {
     setDir('fade');
     setTab(role === 'seller' ? 'listings' : 'home');
   }, [role]);
+
+  if (!s.authed)
+    return (
+      <Frame toast={toast}>
+        <div className="screen fade">
+          <Auth />
+        </div>
+      </Frame>
+    );
 
   if (!role)
     return (
